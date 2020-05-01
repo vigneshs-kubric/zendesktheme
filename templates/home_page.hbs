@@ -1,0 +1,78 @@
+<main class="main-sidebar" role="main">
+<div id="sidebar" class="sidebar-panel">
+  <ul class="sidebar">
+    <li class="sidebar-item sidebar-home open">
+      <a href="{{page_path 'help_center'}}" class="sidebar-item-title">
+        Home
+      </a>
+    </li>
+    <li class="sidebar-section" v-for='category in categories' :data-id='category.id'>
+      <h4 class="sidebar-category-title" v-cloak>{[{category.name}]}</h4>
+      <ul>
+        <li :class="['sidebar-item', isOpen(section.id)]" v-for='section in category.sections' :data-id='section.id'>
+          <span class="sidebar-item-title" @click='setActiveSection(section.id)'>
+            {[{section.name}]}
+          </span>
+          <ul v-if='section.id === activeSection'>
+            <li :class="['sidebar-item', isCurrent(article.id)]" v-for='article in section.articles'>
+              <a :href='article.html_url' class="sidebar-item-link">
+                {[{article.title}]}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+
+<div class="container content">
+
+  <div class="community-image"></div>
+
+  <h1 class="home-title">{{settings.homepage_title}}</h1>
+  <p class="home-desc">{{settings.homepage_description}}</p>
+
+  <section class="section knowledge-base">
+    <section class="categories blocks">
+      <ul class="blocks-list">
+        {{#each categories}}
+          {{#if ../has_multiple_categories}}
+            <li class="blocks-item">
+              <a href='{{url}}' class="blocks-item-link">
+                <h3 class="blocks-item-title">{{name}}</h3>
+                <p class="blocks-item-description">{{excerpt description}}</p>
+              </a>
+            </li>
+          {{else}}
+            {{#each sections}}
+              <li class="blocks-item {{#if internal}}blocks-item-internal{{/if}}">
+                <a href='{{url}}' class="blocks-item-link">
+                  <h3 class="blocks-item-title">
+                    {{name}}
+                    {{#if internal}}
+                      <span class="icon-lock" title="{{t 'internal'}}"></span>
+                    {{/if}}
+                  </h3>
+                  <p class="blocks-item-description">{{excerpt description}}</p>
+                </a>
+              </li>
+            {{/each}}
+          {{/if}}
+        {{/each}}
+      </ul>
+      {{pagination}}
+    </section>
+  </section>
+
+  <section class="section support">
+    <h3>Still have questions?</h3>
+    <p>We're happy to help with whatever questions you have! You can reach out to us by chat or <a href="{{page_path 'new_request'}}">send us an email</a>!</p>
+  </section>
+
+</div>
+
+
+<script>sidebar.$mount("#sidebar");</script>
+</main>
